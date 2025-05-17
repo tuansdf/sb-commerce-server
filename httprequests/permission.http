@@ -1,0 +1,29 @@
+@id=
+@code=
+@name=
+
+###
+
+GET {{base_url}}/v1/permissions/code/{{code}}
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/permissions/{{id}}
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/permissions/search
+Authorization: Bearer {{access_token}}
+
+###
+
+PUT {{base_url}}/v1/permissions
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "code": "{{code}}",
+  "name": "{{name}}"
+}
