@@ -13,6 +13,7 @@ import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,14 @@ public class ProductServiceImpl implements ProductService {
         builder.append(" from product p ");
         builder.append(" left join file_object fo on (fo.id = p.image_file_id) ");
         builder.append(" where 1=1 ");
+        if (requestDTO.getPriceFrom() != null) {
+            builder.append(" and p.price >= :priceFrom ");
+            params.put("priceFrom", requestDTO.getPriceFrom());
+        }
+        if (requestDTO.getPriceTo() != null) {
+            builder.append(" and p.price <= :priceTo ");
+            params.put("priceTo", requestDTO.getPriceTo());
+        }
         if (requestDTO.getCreatedAtFrom() != null) {
             builder.append(" and p.created_at >= :createdAtFrom ");
             params.put("createdAtFrom", requestDTO.getCreatedAtFrom().truncatedTo(SQLHelper.MIN_TIME_PRECISION));
@@ -93,6 +102,16 @@ public class ProductServiceImpl implements ProductService {
             params.put("createdAtTo", requestDTO.getCreatedAtTo().truncatedTo(SQLHelper.MIN_TIME_PRECISION));
         }
         if (!isCount) {
+            List<String> validOrderBys = List.of("created_at", "price");
+            List<String> validOrderDirections = List.of("asc", "desc");
+            if (StringUtils.isNotBlank(requestDTO.getOrderBy()) && validOrderBys.contains(requestDTO.getOrderBy())) {
+                builder.append(" order by p.").append(requestDTO.getOrderBy()).append(" ");
+                if (validOrderDirections.contains(requestDTO.getOrderDirection())) {
+                    builder.append(" ").append(requestDTO.getOrderDirection()).append(" ");
+                }
+            } else {
+                builder.append(" order by p.created_at desc ");
+            }
             builder.append(SQLHelper.toLimitOffset(result.getPageNumber(), result.getPageSize()));
         }
         if (isCount) {

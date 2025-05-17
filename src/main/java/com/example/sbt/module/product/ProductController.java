@@ -23,16 +23,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<ProductDTO>> findOne(@PathVariable UUID id) {
-        try {
-            var result = productService.findOneByIdOrThrow(id);
-            return ResponseEntity.ok(new CommonResponse<>(result));
-        } catch (Exception e) {
-            return ExceptionUtils.toResponseEntity(e);
-        }
-    }
-
     @PutMapping
     @Secured({PermissionCode.SYSTEM_ADMIN})
     public ResponseEntity<CommonResponse<ProductDTO>> save(@RequestBody ProductDTO requestDTO) {
@@ -44,19 +34,37 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CommonResponse<ProductDTO>> findOne(@PathVariable UUID id) {
+        try {
+            var result = productService.findOneByIdOrThrow(id);
+            return ResponseEntity.ok(new CommonResponse<>(result));
+        } catch (Exception e) {
+            return ExceptionUtils.toResponseEntity(e);
+        }
+    }
+
     @GetMapping("/search")
     public ResponseEntity<CommonResponse<PaginationData<ProductDTO>>> search(
             @RequestParam(required = false) Long pageNumber,
             @RequestParam(required = false) Long pageSize,
+            @RequestParam(required = false) Long priceFrom,
+            @RequestParam(required = false) Long priceTo,
             @RequestParam(required = false) Instant createdAtFrom,
             @RequestParam(required = false) Instant createdAtTo,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) String orderDirection,
             @RequestParam(required = false, defaultValue = "false") Boolean count) {
         try {
             var requestDTO = SearchProductRequestDTO.builder()
                     .pageNumber(pageNumber)
                     .pageSize(pageSize)
+                    .priceFrom(priceFrom)
+                    .priceTo(priceTo)
                     .createdAtTo(createdAtTo)
                     .createdAtFrom(createdAtFrom)
+                    .orderBy(orderBy)
+                    .orderDirection(orderDirection)
                     .build();
             var result = productService.search(requestDTO, count);
             return ResponseEntity.ok(new CommonResponse<>(result));

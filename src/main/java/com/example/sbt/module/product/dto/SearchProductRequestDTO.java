@@ -15,7 +15,11 @@ public class SearchProductRequestDTO {
 
     private Long pageNumber;
     private Long pageSize;
+    private Long priceFrom;
+    private Long priceTo;
     private Instant createdAtFrom;
     private Instant createdAtTo;
+    private String orderBy;
+    private String orderDirection;
 
 }

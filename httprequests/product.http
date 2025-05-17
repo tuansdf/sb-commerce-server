@@ -1,0 +1,24 @@
+@id=
+
+###
+
+GET {{base_url}}/v1/products/search
+Authorization: Bearer {{access_token}}
+
+###
+
+PUT {{base_url}}/v1/products
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "",
+  "price": 0,
+  "stock": 0
+}
+
+###
+
+GET {{base_url}}/v1/products/{{id}}
+Authorization: Bearer {{access_token}}
