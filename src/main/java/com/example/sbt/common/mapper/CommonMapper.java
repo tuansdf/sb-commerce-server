@@ -13,6 +13,8 @@ import com.example.sbt.module.notification.Notification;
 import com.example.sbt.module.notification.dto.NotificationDTO;
 import com.example.sbt.module.permission.Permission;
 import com.example.sbt.module.permission.dto.PermissionDTO;
+import com.example.sbt.module.product.Product;
+import com.example.sbt.module.product.dto.ProductDTO;
 import com.example.sbt.module.role.dto.RoleDTO;
 import com.example.sbt.module.role.entity.Role;
 import com.example.sbt.module.token.Token;
@@ -86,5 +88,9 @@ public interface CommonMapper {
     FileObjectDTO toDTO(FileObject v);
 
     FileObject toEntity(FileObjectDTO v);
+
+    ProductDTO toDTO(Product v);
+
+    Product toEntity(ProductDTO v);
 
 }
