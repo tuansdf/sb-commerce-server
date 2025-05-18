@@ -1,0 +1,22 @@
+package com.example.sbt.module.cart.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CartDTO {
+
+    private UUID id;
+    private UUID userId;
+    private Instant createdAt;
+    private Instant updatedAt;
+
+}
