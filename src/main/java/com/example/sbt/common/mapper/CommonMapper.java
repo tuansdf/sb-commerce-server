@@ -2,6 +2,8 @@ package com.example.sbt.common.mapper;
 
 import com.example.sbt.module.cart.Cart;
 import com.example.sbt.module.cart.dto.CartDTO;
+import com.example.sbt.module.cartitem.CartItem;
+import com.example.sbt.module.cartitem.dto.CartItemDTO;
 import com.example.sbt.module.configuration.Configuration;
 import com.example.sbt.module.configuration.dto.ConfigurationDTO;
 import com.example.sbt.module.email.Email;
@@ -98,5 +100,9 @@ public interface CommonMapper {
     CartDTO toDTO(Cart v);
 
     Cart toEntity(CartDTO v);
+
+    CartItemDTO toDTO(CartItem v);
+
+    CartItem toEntity(CartItemDTO v);
 
 }

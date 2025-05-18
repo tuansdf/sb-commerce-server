@@ -12,6 +12,10 @@ public interface CartService {
 
     void deleteById(UUID cartId, UUID userId);
 
+    CartDTO findOneLatestByUserId(UUID userId);
+
+    CartDTO findOneOrInitByUserId(UUID userId);
+
     CartDTO findOneById(UUID cartId, UUID userId);
 
     CartDTO findOneByIdOrThrow(UUID cartId, UUID userId);

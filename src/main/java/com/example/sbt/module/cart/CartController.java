@@ -6,6 +6,8 @@ import com.example.sbt.common.dto.RequestContextHolder;
 import com.example.sbt.common.util.ExceptionUtils;
 import com.example.sbt.module.cart.dto.CartDTO;
 import com.example.sbt.module.cart.dto.SearchCartRequestDTO;
+import com.example.sbt.module.cartitem.CartItemService;
+import com.example.sbt.module.cartitem.dto.CartItemDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class CartController {
 
     private final CartService cartService;
+    private final CartItemService cartItemService;
 
     @PostMapping("/init")
     public ResponseEntity<CommonResponse<CartDTO>> init() {
@@ -33,20 +36,10 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CommonResponse<CartDTO>> delete(@PathVariable UUID id) {
+    public ResponseEntity<CommonResponse<Object>> delete(@PathVariable UUID id) {
         try {
             cartService.deleteById(id, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>());
-        } catch (Exception e) {
-            return ExceptionUtils.toResponseEntity(e);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<CartDTO>> findOne(@PathVariable UUID id) {
-        try {
-            var result = cartService.findOneByIdOrThrow(id, RequestContextHolder.get().getUserId());
-            return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
         }
@@ -73,6 +66,46 @@ public class CartController {
                     .build();
             var result = cartService.search(requestDTO, count);
             return ResponseEntity.ok(new CommonResponse<>(result));
+        } catch (Exception e) {
+            return ExceptionUtils.toResponseEntity(e);
+        }
+    }
+
+    @PostMapping("/items")
+    public ResponseEntity<CommonResponse<CartItemDTO>> addItem(@RequestBody CartItemDTO cartItemDTO) {
+        try {
+            var result = cartItemService.save(cartItemDTO, RequestContextHolder.get().getUserId());
+            return ResponseEntity.ok(new CommonResponse<>(result));
+        } catch (Exception e) {
+            return ExceptionUtils.toResponseEntity(e);
+        }
+    }
+
+    @PatchMapping("/items/quantity")
+    public ResponseEntity<CommonResponse<CartItemDTO>> setItemQuantity(@RequestBody CartItemDTO cartItemDTO) {
+        try {
+            var result = cartItemService.setQuantity(cartItemDTO, RequestContextHolder.get().getUserId());
+            return ResponseEntity.ok(new CommonResponse<>(result));
+        } catch (Exception e) {
+            return ExceptionUtils.toResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/items/{id}")
+    public ResponseEntity<CommonResponse<Object>> deleteItem(@PathVariable UUID id) {
+        try {
+            cartItemService.deleteById(id, RequestContextHolder.get().getUserId());
+            return ResponseEntity.ok(new CommonResponse<>());
+        } catch (Exception e) {
+            return ExceptionUtils.toResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/items")
+    public ResponseEntity<CommonResponse<Object>> deleteCartItems() {
+        try {
+            cartItemService.deleteAllByLatestUserCart(RequestContextHolder.get().getUserId());
+            return ResponseEntity.ok(new CommonResponse<>());
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
         }

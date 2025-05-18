@@ -21,3 +21,30 @@ Content-Type: application/json
 
 GET {{base_url}}/v1/carts/{{id}}
 Authorization: Bearer {{access_token}}
+
+###
+
+POST {{base_url}}/v1/carts/items
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "quantity": 0,
+  "productId": ""
+}
+
+###
+
+PATCH {{base_url}}/v1/carts/items/quantity
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "id": "",
+  "quantity": 0
+}
+
+###
+
+DELETE {{base_url}}/v1/carts/items
+Authorization: Bearer {{access_token}}

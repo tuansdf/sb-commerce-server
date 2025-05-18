@@ -8,6 +8,7 @@ import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
 import com.example.sbt.module.cart.dto.CartDTO;
 import com.example.sbt.module.cart.dto.SearchCartRequestDTO;
+import com.example.sbt.module.cartitem.CartItemRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -28,10 +29,14 @@ public class CartServiceImpl implements CartService {
     private final CommonMapper commonMapper;
     private final EntityManager entityManager;
     private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Override
     public CartDTO init(UUID userId) {
         if (userId == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
+        if (cartRepository.existsByUserId(userId)) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
         Cart result = new Cart();
@@ -44,7 +49,24 @@ public class CartServiceImpl implements CartService {
         if (cartId == null || userId == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
+        findOneByIdOrThrow(cartId, userId);
+        cartItemRepository.deleteAllByCartId(cartId);
         cartRepository.deleteByIdAndUserId(cartId, userId);
+    }
+
+    @Override
+    public CartDTO findOneLatestByUserId(UUID userId) {
+        Optional<Cart> result = cartRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+        return result.map(commonMapper::toDTO).orElse(null);
+    }
+
+    @Override
+    public CartDTO findOneOrInitByUserId(UUID userId) {
+        Optional<Cart> result = cartRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+        if (result.isEmpty()) {
+            return init(userId);
+        }
+        return commonMapper.toDTO(result.get());
     }
 
     @Override

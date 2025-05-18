@@ -9,8 +9,12 @@ import java.util.UUID;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, UUID> {
 
+    Boolean existsByUserId(UUID userId);
+
     void deleteByIdAndUserId(UUID cartId, UUID userId);
 
     Optional<Cart> findTopByIdAndUserId(UUID cartId, UUID userId);
+
+    Optional<Cart> findTopByUserIdOrderByCreatedAtDesc(UUID userId);
 
 }

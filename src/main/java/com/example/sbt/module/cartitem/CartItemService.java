@@ -1,19 +1,25 @@
 package com.example.sbt.module.cartitem;
 
-import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.module.cartitem.dto.CartItemDTO;
-import com.example.sbt.module.cartitem.dto.SearchCartItemRequestDTO;
 
 import java.util.UUID;
 
 public interface CartItemService {
 
-    CartItemDTO save(CartItemDTO requestDTO);
+    CartItemDTO save(CartItemDTO requestDTO, UUID userId);
+
+    CartItemDTO setQuantity(CartItemDTO requestDTO, UUID userId);
 
     CartItemDTO findOneById(UUID id);
 
     CartItemDTO findOneByIdOrThrow(UUID id);
 
-    PaginationData<CartItemDTO> search(SearchCartItemRequestDTO requestDTO, boolean isCount);
+    void deleteAllByLatestUserCart(UUID userId);
+
+    void deleteAllByCartId(UUID cartId);
+
+    void deleteAllByCartId(UUID cartId, UUID userId);
+
+    void deleteById(UUID id, UUID userId);
 
 }
