@@ -32,8 +32,11 @@ public abstract class BaseEntity implements Serializable {
     @PrePersist
     private void prePersist() {
         if (id == null) {
-            id = RandomUtils.Secure.generateTimeBasedUUID();
+            this.id = RandomUtils.Secure.generateTimeBasedUUID();
         }
+        Instant now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
 }

@@ -8,11 +8,13 @@ import java.util.UUID;
 
 public interface CartService {
 
-    CartDTO save(CartDTO requestDTO);
+    CartDTO init(UUID userId);
 
-    CartDTO findOneById(UUID id);
+    void deleteById(UUID cartId, UUID userId);
 
-    CartDTO findOneByIdOrThrow(UUID id);
+    CartDTO findOneById(UUID cartId, UUID userId);
+
+    CartDTO findOneByIdOrThrow(UUID cartId, UUID userId);
 
     PaginationData<CartDTO> search(SearchCartRequestDTO requestDTO, boolean isCount);
 

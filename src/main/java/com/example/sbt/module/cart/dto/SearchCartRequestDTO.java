@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +18,8 @@ public class SearchCartRequestDTO {
     private Long pageSize;
     private Instant createdAtFrom;
     private Instant createdAtTo;
+    private String orderBy;
+    private String orderDirection;
+    private UUID userId;
 
 }

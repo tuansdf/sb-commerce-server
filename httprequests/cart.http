@@ -1,0 +1,23 @@
+@id=
+
+###
+
+GET {{base_url}}/v1/carts/search
+Authorization: Bearer {{access_token}}
+
+###
+
+POST {{base_url}}/v1/carts/init
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+
+DELETE {{base_url}}/v1/carts/{{id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+
+GET {{base_url}}/v1/carts/{{id}}
+Authorization: Bearer {{access_token}}

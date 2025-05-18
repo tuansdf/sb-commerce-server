@@ -1,5 +1,7 @@
 package com.example.sbt.common.mapper;
 
+import com.example.sbt.module.cart.Cart;
+import com.example.sbt.module.cart.dto.CartDTO;
 import com.example.sbt.module.configuration.Configuration;
 import com.example.sbt.module.configuration.dto.ConfigurationDTO;
 import com.example.sbt.module.email.Email;
@@ -92,5 +94,9 @@ public interface CommonMapper {
     ProductDTO toDTO(Product v);
 
     Product toEntity(ProductDTO v);
+
+    CartDTO toDTO(Cart v);
+
+    Cart toEntity(CartDTO v);
 
 }
