@@ -124,8 +124,9 @@ public class CartServiceImpl implements CartService {
                 if (validOrderDirections.contains(requestDTO.getOrderDirection())) {
                     builder.append(" ").append(requestDTO.getOrderDirection()).append(" ");
                 }
+                builder.append(" , c.id asc ");
             } else {
-                builder.append(" order by c.created_at desc ");
+                builder.append(" order by c.id desc ");
             }
             builder.append(SQLHelper.toLimitOffset(result.getPageNumber(), result.getPageSize()));
         }

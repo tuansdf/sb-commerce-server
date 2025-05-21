@@ -1,0 +1,23 @@
+@id=
+
+###
+
+GET {{base_url}}/v1/categories/search?orderBy=name&orderDirection=desc
+Authorization: Bearer {{access_token}}
+
+###
+
+PUT {{base_url}}/v1/categories
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": ""
+}
+
+
+###
+
+GET {{base_url}}/v1/categories/{{id}}
+Authorization: Bearer {{access_token}}
