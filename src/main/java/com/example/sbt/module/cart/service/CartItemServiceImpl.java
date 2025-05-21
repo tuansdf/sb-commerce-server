@@ -1,11 +1,12 @@
-package com.example.sbt.module.cartitem;
+package com.example.sbt.module.cart.service;
 
 import com.example.sbt.common.exception.CustomException;
 import com.example.sbt.common.mapper.CommonMapper;
 import com.example.sbt.common.util.ConversionUtils;
-import com.example.sbt.module.cart.CartService;
 import com.example.sbt.module.cart.dto.CartDTO;
-import com.example.sbt.module.cartitem.dto.CartItemDTO;
+import com.example.sbt.module.cart.dto.CartItemDTO;
+import com.example.sbt.module.cart.entity.CartItem;
+import com.example.sbt.module.cart.repository.CartItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

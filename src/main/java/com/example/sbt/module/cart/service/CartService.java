@@ -1,4 +1,4 @@
-package com.example.sbt.module.cart;
+package com.example.sbt.module.cart.service;
 
 import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.module.cart.dto.CartDTO;

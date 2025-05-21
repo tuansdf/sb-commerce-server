@@ -1,8 +1,8 @@
-package com.example.sbt.module.orderitem;
+package com.example.sbt.module.order.service;
 
 import com.example.sbt.common.dto.PaginationData;
-import com.example.sbt.module.orderitem.dto.OrderItemDTO;
-import com.example.sbt.module.orderitem.dto.SearchOrderItemRequestDTO;
+import com.example.sbt.module.order.dto.OrderItemDTO;
+import com.example.sbt.module.order.dto.SearchOrderItemRequestDTO;
 
 import java.util.UUID;
 

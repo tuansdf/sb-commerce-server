@@ -1,6 +1,6 @@
-package com.example.sbt.module.cartitem;
+package com.example.sbt.module.cart.service;
 
-import com.example.sbt.module.cartitem.dto.CartItemDTO;
+import com.example.sbt.module.cart.dto.CartItemDTO;
 
 import java.util.UUID;
 

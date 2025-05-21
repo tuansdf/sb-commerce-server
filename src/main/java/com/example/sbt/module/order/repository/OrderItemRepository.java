@@ -1,5 +1,6 @@
-package com.example.sbt.module.orderitem;
+package com.example.sbt.module.order.repository;
 
+import com.example.sbt.module.order.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

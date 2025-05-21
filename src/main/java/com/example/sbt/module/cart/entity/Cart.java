@@ -1,4 +1,4 @@
-package com.example.sbt.module.cart;
+package com.example.sbt.module.cart.entity;
 
 import com.example.sbt.common.constant.ResultSetName;
 import com.example.sbt.common.entity.BaseEntity;

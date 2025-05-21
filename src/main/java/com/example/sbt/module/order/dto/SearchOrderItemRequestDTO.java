@@ -1,4 +1,4 @@
-package com.example.sbt.module.orderitem.dto;
+package com.example.sbt.module.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

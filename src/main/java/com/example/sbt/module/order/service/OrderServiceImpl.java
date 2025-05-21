@@ -1,4 +1,4 @@
-package com.example.sbt.module.order;
+package com.example.sbt.module.order.service;
 
 import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.module.order.dto.OrderDTO;

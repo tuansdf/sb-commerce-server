@@ -1,4 +1,4 @@
-package com.example.sbt.module.cart;
+package com.example.sbt.module.cart.service;
 
 import com.example.sbt.common.constant.ResultSetName;
 import com.example.sbt.common.dto.PaginationData;
@@ -8,7 +8,9 @@ import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
 import com.example.sbt.module.cart.dto.CartDTO;
 import com.example.sbt.module.cart.dto.SearchCartRequestDTO;
-import com.example.sbt.module.cartitem.CartItemRepository;
+import com.example.sbt.module.cart.entity.Cart;
+import com.example.sbt.module.cart.repository.CartRepository;
+import com.example.sbt.module.cart.repository.CartItemRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;

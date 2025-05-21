@@ -1,4 +1,4 @@
-package com.example.sbt.module.order;
+package com.example.sbt.module.order.entity;
 
 import com.example.sbt.common.entity.BaseEntity;
 import jakarta.persistence.Column;

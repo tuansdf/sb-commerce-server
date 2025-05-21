@@ -1,9 +1,9 @@
 package com.example.sbt.common.mapper;
 
-import com.example.sbt.module.cart.Cart;
+import com.example.sbt.module.cart.entity.Cart;
 import com.example.sbt.module.cart.dto.CartDTO;
-import com.example.sbt.module.cartitem.CartItem;
-import com.example.sbt.module.cartitem.dto.CartItemDTO;
+import com.example.sbt.module.cart.entity.CartItem;
+import com.example.sbt.module.cart.dto.CartItemDTO;
 import com.example.sbt.module.category.Category;
 import com.example.sbt.module.category.dto.CategoryDTO;
 import com.example.sbt.module.configuration.Configuration;
