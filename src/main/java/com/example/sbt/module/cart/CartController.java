@@ -1,20 +1,16 @@
 package com.example.sbt.module.cart;
 
 import com.example.sbt.common.dto.CommonResponse;
-import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.common.dto.RequestContextHolder;
 import com.example.sbt.common.util.ExceptionUtils;
 import com.example.sbt.module.cart.dto.CartDTO;
-import com.example.sbt.module.cart.dto.SearchCartRequestDTO;
-import com.example.sbt.module.cart.service.CartService;
-import com.example.sbt.module.cart.service.CartItemService;
 import com.example.sbt.module.cart.dto.CartItemDTO;
+import com.example.sbt.module.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Slf4j
@@ -24,48 +20,11 @@ import java.util.UUID;
 public class CartController {
 
     private final CartService cartService;
-    private final CartItemService cartItemService;
 
-    @PostMapping("/init")
-    public ResponseEntity<CommonResponse<CartDTO>> init() {
+    @GetMapping("/me")
+    public ResponseEntity<CommonResponse<CartDTO>> findOneOrInit() {
         try {
-            var result = cartService.init(RequestContextHolder.get().getUserId());
-            return ResponseEntity.ok(new CommonResponse<>(result));
-        } catch (Exception e) {
-            return ExceptionUtils.toResponseEntity(e);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CommonResponse<Object>> delete(@PathVariable UUID id) {
-        try {
-            cartService.deleteById(id, RequestContextHolder.get().getUserId());
-            return ResponseEntity.ok(new CommonResponse<>());
-        } catch (Exception e) {
-            return ExceptionUtils.toResponseEntity(e);
-        }
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<CommonResponse<PaginationData<CartDTO>>> search(
-            @RequestParam(required = false) Long pageNumber,
-            @RequestParam(required = false) Long pageSize,
-            @RequestParam(required = false) Instant createdAtFrom,
-            @RequestParam(required = false) Instant createdAtTo,
-            @RequestParam(required = false) String orderBy,
-            @RequestParam(required = false) String orderDirection,
-            @RequestParam(required = false, defaultValue = "false") Boolean count) {
-        try {
-            var requestDTO = SearchCartRequestDTO.builder()
-                    .pageNumber(pageNumber)
-                    .pageSize(pageSize)
-                    .createdAtTo(createdAtTo)
-                    .createdAtFrom(createdAtFrom)
-                    .orderBy(orderBy)
-                    .orderDirection(orderDirection)
-                    .userId(RequestContextHolder.get().getUserId())
-                    .build();
-            var result = cartService.search(requestDTO, count);
+            var result = cartService.findOneOrInitByUserId(RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -75,7 +34,7 @@ public class CartController {
     @PostMapping("/items")
     public ResponseEntity<CommonResponse<CartItemDTO>> addItem(@RequestBody CartItemDTO cartItemDTO) {
         try {
-            var result = cartItemService.save(cartItemDTO, RequestContextHolder.get().getUserId());
+            var result = cartService.addItem(cartItemDTO, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -85,8 +44,18 @@ public class CartController {
     @PatchMapping("/items/quantity")
     public ResponseEntity<CommonResponse<CartItemDTO>> setItemQuantity(@RequestBody CartItemDTO cartItemDTO) {
         try {
-            var result = cartItemService.setQuantity(cartItemDTO, RequestContextHolder.get().getUserId());
+            var result = cartService.setItemQuantity(cartItemDTO, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
+        } catch (Exception e) {
+            return ExceptionUtils.toResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/items")
+    public ResponseEntity<CommonResponse<Object>> deleteItems() {
+        try {
+            cartService.deleteAllItemsByUserId(RequestContextHolder.get().getUserId());
+            return ResponseEntity.ok(new CommonResponse<>());
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
         }
@@ -95,17 +64,7 @@ public class CartController {
     @DeleteMapping("/items/{id}")
     public ResponseEntity<CommonResponse<Object>> deleteItem(@PathVariable UUID id) {
         try {
-            cartItemService.deleteById(id, RequestContextHolder.get().getUserId());
-            return ResponseEntity.ok(new CommonResponse<>());
-        } catch (Exception e) {
-            return ExceptionUtils.toResponseEntity(e);
-        }
-    }
-
-    @DeleteMapping("/items")
-    public ResponseEntity<CommonResponse<Object>> deleteCartItems() {
-        try {
-            cartItemService.deleteAllByLatestUserCart(RequestContextHolder.get().getUserId());
+            cartService.deleteItemByIdAndUserId(id, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>());
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);

@@ -14,6 +14,8 @@ public interface ProductService {
 
     ProductDTO findOneByIdOrThrow(UUID id);
 
+    Integer getStockByProductId(UUID id);
+
     PaginationData<ProductDTO> search(SearchProductRequestDTO requestDTO, boolean isCount);
 
 }

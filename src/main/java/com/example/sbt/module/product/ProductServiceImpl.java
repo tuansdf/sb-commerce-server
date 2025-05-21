@@ -64,6 +64,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Integer getStockByProductId(UUID id) {
+        return productRepository.findStockByProductId(id);
+    }
+
+    @Override
     public PaginationData<ProductDTO> search(SearchProductRequestDTO requestDTO, boolean isCount) {
         PaginationData<ProductDTO> result = executeSearch(requestDTO, true);
         if (!isCount && result.getTotalItems() > 0) {

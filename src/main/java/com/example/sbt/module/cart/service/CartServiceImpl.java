@@ -1,26 +1,25 @@
 package com.example.sbt.module.cart.service;
 
-import com.example.sbt.common.constant.ResultSetName;
-import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.common.exception.CustomException;
 import com.example.sbt.common.mapper.CommonMapper;
-import com.example.sbt.common.util.ConversionUtils;
-import com.example.sbt.common.util.SQLHelper;
+import com.example.sbt.common.util.LocaleHelper;
+import com.example.sbt.common.util.LocaleHelper.LocaleKey;
 import com.example.sbt.module.cart.dto.CartDTO;
-import com.example.sbt.module.cart.dto.SearchCartRequestDTO;
+import com.example.sbt.module.cart.dto.CartItemDTO;
 import com.example.sbt.module.cart.entity.Cart;
-import com.example.sbt.module.cart.repository.CartRepository;
+import com.example.sbt.module.cart.entity.CartItem;
 import com.example.sbt.module.cart.repository.CartItemRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
+import com.example.sbt.module.cart.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,12 +28,10 @@ import java.util.*;
 public class CartServiceImpl implements CartService {
 
     private final CommonMapper commonMapper;
-    private final EntityManager entityManager;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
-    @Override
-    public CartDTO init(UUID userId) {
+    private CartDTO init(UUID userId) {
         if (userId == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
@@ -46,105 +43,75 @@ public class CartServiceImpl implements CartService {
         return commonMapper.toDTO(cartRepository.save(result));
     }
 
-    @Override
-    public void deleteById(UUID cartId, UUID userId) {
-        if (cartId == null || userId == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
-        }
-        findOneByIdOrThrow(cartId, userId);
-        cartItemRepository.deleteAllByCartId(cartId);
-        cartRepository.deleteByIdAndUserId(cartId, userId);
-    }
-
-    @Override
-    public CartDTO findOneLatestByUserId(UUID userId) {
-        Optional<Cart> result = cartRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
-        return result.map(commonMapper::toDTO).orElse(null);
+    private List<CartItemDTO> findAllItemsByCartId(UUID cartId) {
+        if (cartId == null) return null;
+        List<CartItem> items = cartItemRepository.findAllByCartId(cartId);
+        if (CollectionUtils.isEmpty(items)) return null;
+        return items.stream().map(commonMapper::toDTO).toList();
     }
 
     @Override
     public CartDTO findOneOrInitByUserId(UUID userId) {
-        Optional<Cart> result = cartRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
-        if (result.isEmpty()) {
+        if (userId == null) return null;
+        Optional<Cart> cartOptional = cartRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+        if (cartOptional.isEmpty()) {
             return init(userId);
         }
-        return commonMapper.toDTO(result.get());
-    }
-
-    @Override
-    public CartDTO findOneById(UUID cartId, UUID userId) {
-        Optional<Cart> result = cartRepository.findTopByIdAndUserId(cartId, userId);
-        return result.map(commonMapper::toDTO).orElse(null);
-    }
-
-    @Override
-    public CartDTO findOneByIdOrThrow(UUID cartId, UUID userId) {
-        CartDTO result = findOneById(cartId, userId);
-        if (result == null) {
-            throw new CustomException(HttpStatus.NOT_FOUND);
-        }
+        CartDTO result = commonMapper.toDTO(cartOptional.get());
+        result.setItems(findAllItemsByCartId(result.getId()));
         return result;
     }
 
     @Override
-    public PaginationData<CartDTO> search(SearchCartRequestDTO requestDTO, boolean isCount) {
-        PaginationData<CartDTO> result = executeSearch(requestDTO, true);
-        if (!isCount && result.getTotalItems() > 0) {
-            result.setItems(executeSearch(requestDTO, false).getItems());
-        }
-        return result;
+    public void deleteAllItemsByUserId(UUID userId) {
+        if (userId == null) return;
+        Optional<Cart> cartOptional = cartRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+        if (cartOptional.isEmpty()) return;
+        cartItemRepository.deleteAllByCartId(cartOptional.get().getId());
     }
 
-    private PaginationData<CartDTO> executeSearch(SearchCartRequestDTO requestDTO, boolean isCount) {
-        PaginationData<CartDTO> result = SQLHelper.initData(requestDTO.getPageNumber(), requestDTO.getPageSize());
-        Map<String, Object> params = new HashMap<>();
-        StringBuilder builder = new StringBuilder();
-        if (isCount) {
-            builder.append(" select count(*) ");
-        } else {
-            builder.append(" select c.id, c.user_id, c.created_at, c.updated_at ");
+    @Override
+    public void deleteItemByIdAndUserId(UUID itemId, UUID userId) {
+        if (itemId == null || userId == null) return;
+        CartItem cartItem = cartItemRepository.findTopByIdAndUserId(itemId, userId).orElse(null);
+        if (cartItem == null) return;
+        cartItemRepository.deleteById(cartItem.getId());
+    }
+
+    @Override
+    public CartItemDTO setItemQuantity(CartItemDTO requestDTO, UUID userId) {
+        if (requestDTO == null || userId == null || requestDTO.getId() == null) {
+            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.cart_item")));
         }
-        builder.append(" from cart c ");
-        builder.append(" where 1=1 ");
-        if (requestDTO.getUserId() != null) {
-            builder.append(" and c.user_id >= :userId ");
-            params.put("userId", requestDTO.getUserId());
+        if (requestDTO.getQuantity() == null) {
+            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.quantity")));
         }
-        if (requestDTO.getCreatedAtFrom() != null) {
-            builder.append(" and c.created_at >= :createdAtFrom ");
-            params.put("createdAtFrom", requestDTO.getCreatedAtFrom().truncatedTo(SQLHelper.MIN_TIME_PRECISION));
+        Optional<CartItem> cartItemOptional = cartItemRepository.findTopByIdAndUserId(requestDTO.getId(), userId);
+        if (cartItemOptional.isEmpty()) {
+            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.cart_item")));
         }
-        if (requestDTO.getCreatedAtTo() != null) {
-            builder.append(" and c.created_at <= :createdAtTo ");
-            params.put("createdAtTo", requestDTO.getCreatedAtTo().truncatedTo(SQLHelper.MIN_TIME_PRECISION));
+        CartItem cartItem = cartItemOptional.get();
+        cartItem.setQuantity(requestDTO.getQuantity());
+        return commonMapper.toDTO(cartItemRepository.save(cartItem));
+    }
+
+    @Override
+    public CartItemDTO addItem(CartItemDTO requestDTO, UUID userId) {
+        if (requestDTO == null || userId == null) {
+            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.cart_item")));
         }
-        if (!isCount) {
-            List<String> validOrderBys = List.of("created_at");
-            List<String> validOrderDirections = List.of("asc", "desc");
-            if (StringUtils.isNotBlank(requestDTO.getOrderBy()) && validOrderBys.contains(requestDTO.getOrderBy())) {
-                builder.append(" order by c.").append(requestDTO.getOrderBy()).append(" ");
-                if (validOrderDirections.contains(requestDTO.getOrderDirection())) {
-                    builder.append(" ").append(requestDTO.getOrderDirection()).append(" ");
-                }
-                builder.append(" , c.id asc ");
-            } else {
-                builder.append(" order by c.id desc ");
-            }
-            builder.append(SQLHelper.toLimitOffset(result.getPageNumber(), result.getPageSize()));
+        if (requestDTO.getProductId() == null) {
+            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.product")));
         }
-        if (isCount) {
-            Query query = entityManager.createNativeQuery(builder.toString());
-            SQLHelper.setParams(query, params);
-            long count = ConversionUtils.safeToLong(query.getSingleResult());
-            result.setTotalItems(count);
-            result.setTotalPages(SQLHelper.toPages(count, result.getPageSize()));
-        } else {
-            Query query = entityManager.createNativeQuery(builder.toString(), ResultSetName.CART_SEARCH);
-            SQLHelper.setParams(query, params);
-            List<CartDTO> items = query.getResultList();
-            result.setItems(items);
+        if (requestDTO.getQuantity() == null) {
+            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.quantity")));
         }
-        return result;
+        CartDTO cart = findOneOrInitByUserId(userId);
+        CartItem cartItem = cartItemRepository.findTopByCartIdAndProductId(cart.getId(), requestDTO.getProductId()).orElse(new CartItem());
+        cartItem.setCartId(cart.getId());
+        cartItem.setProductId(requestDTO.getProductId());
+        cartItem.setQuantity(requestDTO.getQuantity());
+        return commonMapper.toDTO(cartItemRepository.save(cartItem));
     }
 
 }
