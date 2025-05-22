@@ -31,7 +31,7 @@ public class OrderItem extends BaseEntity {
     private UUID productId;
     @Column(name = "quantity")
     private Integer quantity;
-    @Column(name = "price")
-    private Long price;
+    @Column(name = "unit_price")
+    private Long unitPrice;
 
 }

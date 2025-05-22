@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +20,6 @@ public class SearchOrderRequestDTO {
     private Instant createdAtTo;
     private String orderBy;
     private String orderDirection;
+    private UUID userId;
 
 }

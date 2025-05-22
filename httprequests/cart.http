@@ -19,7 +19,7 @@ Content-Type: application/json
 
 {
   "productId": "{{productId}}",
-  "quantity": 0
+  "quantity": 1
 }
 
 ###

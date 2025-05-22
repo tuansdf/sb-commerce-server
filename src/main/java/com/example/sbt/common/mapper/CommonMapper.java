@@ -1,9 +1,9 @@
 package com.example.sbt.common.mapper;
 
-import com.example.sbt.module.cart.entity.Cart;
 import com.example.sbt.module.cart.dto.CartDTO;
-import com.example.sbt.module.cart.entity.CartItem;
 import com.example.sbt.module.cart.dto.CartItemDTO;
+import com.example.sbt.module.cart.entity.Cart;
+import com.example.sbt.module.cart.entity.CartItem;
 import com.example.sbt.module.category.Category;
 import com.example.sbt.module.category.dto.CategoryDTO;
 import com.example.sbt.module.configuration.Configuration;
@@ -17,6 +17,10 @@ import com.example.sbt.module.loginaudit.LoginAudit;
 import com.example.sbt.module.loginaudit.LoginAuditDTO;
 import com.example.sbt.module.notification.Notification;
 import com.example.sbt.module.notification.dto.NotificationDTO;
+import com.example.sbt.module.order.dto.OrderDTO;
+import com.example.sbt.module.order.dto.OrderItemDTO;
+import com.example.sbt.module.order.entity.Order;
+import com.example.sbt.module.order.entity.OrderItem;
 import com.example.sbt.module.permission.Permission;
 import com.example.sbt.module.permission.dto.PermissionDTO;
 import com.example.sbt.module.product.Product;
@@ -110,5 +114,13 @@ public interface CommonMapper {
     CategoryDTO toDTO(Category v);
 
     Category toEntity(CategoryDTO v);
+
+    OrderDTO toDTO(Order v);
+
+    Order toEntity(OrderDTO v);
+
+    OrderItemDTO toDTO(OrderItem v);
+
+    OrderItem toEntity(OrderItemDTO v);
 
 }

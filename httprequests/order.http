@@ -1,0 +1,16 @@
+@id=
+
+###
+
+GET {{base_url}}/v1/orders/{{id}}
+Authorization: Bearer {{access_token}}
+
+###
+
+POST {{base_url}}/v1/orders
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/orders/search
+Authorization: Bearer {{access_token}}

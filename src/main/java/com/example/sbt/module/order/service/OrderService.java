@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public interface OrderService {
 
-    OrderDTO save(OrderDTO requestDTO);
+    OrderDTO createByUserId(UUID userId);
 
-    OrderDTO findOneById(UUID id);
+    OrderDTO findOneById(UUID id, UUID userId);
 
-    OrderDTO findOneByIdOrThrow(UUID id);
+    OrderDTO findOneByIdOrThrow(UUID id, UUID userId);
 
     PaginationData<OrderDTO> search(SearchOrderRequestDTO requestDTO, boolean isCount);
 

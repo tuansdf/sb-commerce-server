@@ -5,6 +5,8 @@ import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.common.exception.CustomException;
 import com.example.sbt.common.mapper.CommonMapper;
 import com.example.sbt.common.util.ConversionUtils;
+import com.example.sbt.common.util.LocaleHelper;
+import com.example.sbt.common.util.LocaleHelper.LocaleKey;
 import com.example.sbt.common.util.SQLHelper;
 import com.example.sbt.module.product.dto.ProductDTO;
 import com.example.sbt.module.product.dto.SearchProductRequestDTO;
@@ -50,17 +52,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO findOneById(UUID id) {
-        Optional<Product> result = productRepository.findById(id);
-        return result.map(commonMapper::toDTO).orElse(null);
+        return productRepository.findById(id).map(commonMapper::toDTO).orElse(null);
     }
 
     @Override
     public ProductDTO findOneByIdOrThrow(UUID id) {
         ProductDTO result = findOneById(id);
         if (result == null) {
-            throw new CustomException(HttpStatus.NOT_FOUND);
+            throw new CustomException(LocaleHelper.getMessage("form.error.not_found", new LocaleKey("field.product")));
         }
         return result;
+    }
+
+    @Override
+    public List<ProductDTO> findAllByIdIn(List<UUID> ids) {
+        return productRepository.findAllByIdIn(ids).stream().map(commonMapper::toDTO).toList();
     }
 
     @Override
@@ -115,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
                     builder.append(" ").append(requestDTO.getOrderDirection()).append(" ");
                 }
             } else {
-                builder.append(" order by p.created_at desc ");
+                builder.append(" order by p.id desc ");
             }
             builder.append(SQLHelper.toLimitOffset(result.getPageNumber(), result.getPageSize()));
         }
