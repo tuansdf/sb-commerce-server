@@ -1,5 +1,6 @@
-package com.example.sbt.module.cart;
+package com.example.sbt.module.cart.repository;
 
+import com.example.sbt.module.cart.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

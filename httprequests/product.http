@@ -12,11 +12,12 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "name": "",
+  "name": "Product 5",
   "description": "",
-  "price": 0,
-  "stock": 0
+  "price": 50000,
+  "stock": 100
 }
+
 
 ###
 

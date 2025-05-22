@@ -1,25 +1,14 @@
 @id=
+@productId=
 
 ###
 
-GET {{base_url}}/v1/carts/search
+GET {{base_url}}/v1/carts/me
 Authorization: Bearer {{access_token}}
 
 ###
 
-POST {{base_url}}/v1/carts/init
-Authorization: Bearer {{access_token}}
-Content-Type: application/json
-
-###
-
-DELETE {{base_url}}/v1/carts/{{id}}
-Authorization: Bearer {{access_token}}
-Content-Type: application/json
-
-###
-
-GET {{base_url}}/v1/carts/{{id}}
+DELETE {{base_url}}/v1/carts/items
 Authorization: Bearer {{access_token}}
 
 ###
@@ -29,8 +18,8 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "quantity": 0,
-  "productId": ""
+  "productId": "{{productId}}",
+  "quantity": 1
 }
 
 ###
@@ -40,11 +29,11 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "id": "",
+  "id": "{{id}}",
   "quantity": 0
 }
 
 ###
 
-DELETE {{base_url}}/v1/carts/items
+DELETE {{base_url}}/v1/carts/items/{{id}}
 Authorization: Bearer {{access_token}}

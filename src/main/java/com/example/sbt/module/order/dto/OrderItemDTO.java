@@ -1,4 +1,4 @@
-package com.example.sbt.module.cartitem.dto;
+package com.example.sbt.module.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -12,12 +12,13 @@ import java.util.UUID;
 @ToString
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CartItemDTO {
+public class OrderItemDTO {
 
     private UUID id;
-    private UUID cartId;
+    private UUID orderId;
     private UUID productId;
     private Integer quantity;
+    private Long unitPrice;
     private Instant createdAt;
     private Instant updatedAt;
 

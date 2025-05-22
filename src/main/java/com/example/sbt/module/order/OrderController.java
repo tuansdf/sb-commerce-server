@@ -3,9 +3,11 @@ package com.example.sbt.module.order;
 import com.example.sbt.common.constant.PermissionCode;
 import com.example.sbt.common.dto.CommonResponse;
 import com.example.sbt.common.dto.PaginationData;
+import com.example.sbt.common.dto.RequestContextHolder;
 import com.example.sbt.common.util.ExceptionUtils;
 import com.example.sbt.module.order.dto.OrderDTO;
 import com.example.sbt.module.order.dto.SearchOrderRequestDTO;
+import com.example.sbt.module.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +25,11 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PutMapping
+    @PostMapping
     @Secured({PermissionCode.SYSTEM_ADMIN})
-    public ResponseEntity<CommonResponse<OrderDTO>> save(@RequestBody OrderDTO requestDTO) {
+    public ResponseEntity<CommonResponse<OrderDTO>> create() {
         try {
-            var result = orderService.save(requestDTO);
+            var result = orderService.createByUserId(RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -37,7 +39,7 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponse<OrderDTO>> findOne(@PathVariable UUID id) {
         try {
-            var result = orderService.findOneByIdOrThrow(id);
+            var result = orderService.findOneByIdOrThrow(id, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -61,6 +63,7 @@ public class OrderController {
                     .createdAtFrom(createdAtFrom)
                     .orderBy(orderBy)
                     .orderDirection(orderDirection)
+                    .userId(RequestContextHolder.get().getUserId())
                     .build();
             var result = orderService.search(requestDTO, count);
             return ResponseEntity.ok(new CommonResponse<>(result));

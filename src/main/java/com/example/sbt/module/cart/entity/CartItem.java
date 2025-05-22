@@ -1,4 +1,4 @@
-package com.example.sbt.module.orderitem;
+package com.example.sbt.module.cart.entity;
 
 import com.example.sbt.common.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -16,22 +16,20 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(
-        name = "order_item",
+        name = "cart_item",
         indexes = {
-                @Index(name = "order_item_order_id_idx", columnList = "order_id"),
-                @Index(name = "order_item_product_id_idx", columnList = "product_id"),
-                @Index(name = "order_item_created_at_idx", columnList = "created_at"),
+                @Index(name = "cart_item_cart_id_idx", columnList = "cart_id"),
+                @Index(name = "cart_item_product_id_idx", columnList = "product_id"),
+                @Index(name = "cart_item_created_at_idx", columnList = "created_at"),
         }
 )
-public class OrderItem extends BaseEntity {
+public class CartItem extends BaseEntity {
 
-    @Column(name = "order_id")
-    private UUID orderId;
+    @Column(name = "cart_id")
+    private UUID cartId;
     @Column(name = "product_id")
     private UUID productId;
     @Column(name = "quantity")
     private Integer quantity;
-    @Column(name = "price")
-    private Long price;
 
 }
