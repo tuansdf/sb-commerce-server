@@ -13,13 +13,20 @@ Authorization: Bearer {{access_token}}
 
 ###
 
+POST {{base_url}}/v1/orders
+Authorization: Bearer {{access_token}}
+###
 POST {{base_url}}/v1/carts/items
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "productId": "{{productId}}",
-  "quantity": 1
+  "items": [
+    {
+      "productId": "",
+      "quantity": 1
+    }
+  ]
 }
 
 ###

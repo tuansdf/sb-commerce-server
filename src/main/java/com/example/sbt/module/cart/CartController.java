@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -32,9 +33,9 @@ public class CartController {
     }
 
     @PostMapping("/items")
-    public ResponseEntity<CommonResponse<CartItemDTO>> addItem(@RequestBody CartItemDTO cartItemDTO) {
+    public ResponseEntity<CommonResponse<List<CartItemDTO>>> addItems(@RequestBody CartDTO requestDTO) {
         try {
-            var result = cartService.addItem(cartItemDTO, RequestContextHolder.get().getUserId());
+            var result = cartService.addItems(requestDTO.getItems(), RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -42,9 +43,9 @@ public class CartController {
     }
 
     @PatchMapping("/items/quantity")
-    public ResponseEntity<CommonResponse<CartItemDTO>> setItemQuantity(@RequestBody CartItemDTO cartItemDTO) {
+    public ResponseEntity<CommonResponse<CartItemDTO>> setItemQuantity(@RequestBody CartItemDTO requestDTO) {
         try {
-            var result = cartService.setItemQuantity(cartItemDTO, RequestContextHolder.get().getUserId());
+            var result = cartService.setItemQuantity(requestDTO, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
