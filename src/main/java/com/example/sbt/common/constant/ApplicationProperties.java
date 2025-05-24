@@ -52,4 +52,13 @@ public class ApplicationProperties {
     @Value("${custom.email.throttle-time-window}")
     private Integer emailThrottleTimeWindow;
 
+    @Value("${custom.stripe.api-key}")
+    private String stripeApiKey;
+    @Value("${custom.stripe.webhook-secret}")
+    private String stripeWebhookSecret;
+    @Value("${custom.stripe.success-url}")
+    private String stripeSuccessUtl;
+    @Value("${custom.stripe.cancel-url}")
+    private String stripeCancelUrl;
+
 }

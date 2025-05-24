@@ -46,6 +46,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-admin:9.4.3'
     implementation 'software.amazon.awssdk:s3:2.31.11'
+    implementation 'com.stripe:stripe-java:29.1.0'
 
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.commons:commons-collections4:4.5.0-M3'

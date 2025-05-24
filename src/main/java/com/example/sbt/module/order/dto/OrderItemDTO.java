@@ -17,6 +17,7 @@ public class OrderItemDTO {
     private UUID id;
     private UUID orderId;
     private UUID productId;
+    private String productName;
     private Integer quantity;
     private Long unitPrice;
     private Instant createdAt;

@@ -60,14 +60,15 @@ public class OrderServiceImpl implements OrderService {
             if (item.getProductId() == null) {
                 throw new CustomException(LocaleHelper.getMessage("form.error.not_found", new LocaleKey("field.product")));
             }
-            Optional<ProductDTO> productDTO = products.stream().filter(product -> product.getId().equals(item.getProductId())).findFirst();
-            if (productDTO.isEmpty()) {
+            ProductDTO productDTO = products.stream().filter(product -> product.getId().equals(item.getProductId())).findFirst().orElse(null);
+            if (productDTO == null) {
                 throw new CustomException(LocaleHelper.getMessage("form.error.not_found", new LocaleKey("field.product")));
             }
             OrderItemDTO orderItemDTO = new OrderItemDTO();
             orderItemDTO.setProductId(item.getProductId());
             orderItemDTO.setQuantity(item.getQuantity());
-            orderItemDTO.setUnitPrice(productDTO.get().getPrice());
+            orderItemDTO.setUnitPrice(productDTO.getPrice());
+            orderItemDTO.setProductName(productDTO.getName());
             result.add(orderItemDTO);
         }
         return result;

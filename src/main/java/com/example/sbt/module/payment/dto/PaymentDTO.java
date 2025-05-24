@@ -22,5 +22,6 @@ public class PaymentDTO {
     private String method;
     private Instant createdAt;
     private Instant updatedAt;
+    private String checkoutUrl;
 
 }

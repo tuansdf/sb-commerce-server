@@ -7,5 +7,6 @@ public class CommonStatus {
     public static final String PENDING = "PENDING";
     public static final String DONE = "DONE";
     public static final String PAYMENT_PENDING = "PAYMENT_PENDING";
+    public static final String PROCESSING = "PROCESSING";
 
 }

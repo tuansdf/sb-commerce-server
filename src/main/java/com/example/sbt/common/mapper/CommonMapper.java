@@ -21,6 +21,8 @@ import com.example.sbt.module.order.dto.OrderDTO;
 import com.example.sbt.module.order.dto.OrderItemDTO;
 import com.example.sbt.module.order.entity.Order;
 import com.example.sbt.module.order.entity.OrderItem;
+import com.example.sbt.module.payment.Payment;
+import com.example.sbt.module.payment.dto.PaymentDTO;
 import com.example.sbt.module.permission.Permission;
 import com.example.sbt.module.permission.dto.PermissionDTO;
 import com.example.sbt.module.product.Product;
@@ -122,5 +124,9 @@ public interface CommonMapper {
     OrderItemDTO toDTO(OrderItem v);
 
     OrderItem toEntity(OrderItemDTO v);
+
+    PaymentDTO toDTO(Payment v);
+
+    Payment toEntity(PaymentDTO v);
 
 }
