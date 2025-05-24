@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -103,6 +104,15 @@ public class CartServiceImpl implements CartService {
         cartItem.setProductId(requestDTO.getProductId());
         cartItem.setQuantity(requestDTO.getQuantity());
         return commonMapper.toDTO(cartItemRepository.save(cartItem));
+    }
+
+    @Override
+    public List<CartItemDTO> addItems(List<CartItemDTO> requestDTOs, UUID userId) {
+        List<CartItemDTO> result = new ArrayList<>();
+        for (CartItemDTO requestDTO : requestDTOs) {
+            result.add(addItem(requestDTO, userId));
+        }
+        return result;
     }
 
 }

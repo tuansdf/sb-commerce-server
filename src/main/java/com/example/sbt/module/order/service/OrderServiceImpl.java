@@ -196,7 +196,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void setItemsToOrders(List<OrderDTO> orders) {
-        final int BATCH = 100;
+        final int BATCH = 1000;
         if (CollectionUtils.isEmpty(orders)) return;
         List<UUID> orderIds = orders.stream().map(OrderDTO::getId).toList();
         int totalOrders = orderIds.size();
