@@ -8,15 +8,7 @@ Authorization: Bearer {{access_token}}
 
 ###
 
-DELETE {{base_url}}/v1/carts/items
-Authorization: Bearer {{access_token}}
-
-###
-
-POST {{base_url}}/v1/orders
-Authorization: Bearer {{access_token}}
-###
-POST {{base_url}}/v1/carts/items
+PUT {{base_url}}/v1/carts/items
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -31,14 +23,8 @@ Content-Type: application/json
 
 ###
 
-PATCH {{base_url}}/v1/carts/items/quantity
+DELETE {{base_url}}/v1/carts/items
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
-
-{
-  "id": "{{id}}",
-  "quantity": 0
-}
 
 ###
 

@@ -71,23 +71,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartItemDTO setItemQuantity(CartItemDTO requestDTO, UUID userId) {
-        if (requestDTO == null || userId == null || requestDTO.getId() == null) {
-            throw new CustomException(LocaleHelper.getMessage("form.error.not_found", new LocaleKey("field.cart")));
-        }
-        if (requestDTO.getQuantity() == null) {
-            throw new CustomException(LocaleHelper.getMessage("form.error.missing", new LocaleKey("field.quantity")));
-        }
-        Optional<CartItem> cartItemOptional = cartItemRepository.findTopByIdAndUserId(requestDTO.getId(), userId);
-        if (cartItemOptional.isEmpty()) {
-            throw new CustomException(LocaleHelper.getMessage("form.error.not_found", new LocaleKey("field.cart")));
-        }
-        CartItem cartItem = cartItemOptional.get();
-        cartItem.setQuantity(requestDTO.getQuantity());
-        return commonMapper.toDTO(cartItemRepository.save(cartItem));
-    }
-
-    @Override
     public CartItemDTO addItem(CartItemDTO requestDTO, UUID userId) {
         if (requestDTO == null || userId == null) {
             throw new CustomException(LocaleHelper.getMessage("form.error.not_found", new LocaleKey("field.cart")));

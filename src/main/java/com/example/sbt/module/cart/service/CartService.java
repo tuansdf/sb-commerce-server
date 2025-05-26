@@ -14,8 +14,6 @@ public interface CartService {
 
     void deleteItemByIdAndUserId(UUID itemId, UUID userId);
 
-    CartItemDTO setItemQuantity(CartItemDTO requestDTO, UUID userId);
-
     CartItemDTO addItem(CartItemDTO requestDTO, UUID userId);
 
     List<CartItemDTO> addItems(List<CartItemDTO> requestDTOs, UUID userId);

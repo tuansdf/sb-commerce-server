@@ -32,20 +32,10 @@ public class CartController {
         }
     }
 
-    @PostMapping("/items")
+    @PutMapping("/items")
     public ResponseEntity<CommonResponse<List<CartItemDTO>>> addItems(@RequestBody CartDTO requestDTO) {
         try {
             var result = cartService.addItems(requestDTO.getItems(), RequestContextHolder.get().getUserId());
-            return ResponseEntity.ok(new CommonResponse<>(result));
-        } catch (Exception e) {
-            return ExceptionUtils.toResponseEntity(e);
-        }
-    }
-
-    @PatchMapping("/items/quantity")
-    public ResponseEntity<CommonResponse<CartItemDTO>> setItemQuantity(@RequestBody CartItemDTO requestDTO) {
-        try {
-            var result = cartService.setItemQuantity(requestDTO, RequestContextHolder.get().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
