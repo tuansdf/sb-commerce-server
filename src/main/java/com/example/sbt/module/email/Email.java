@@ -1,19 +1,21 @@
 package com.example.sbt.module.email;
 
+import com.example.sbt.common.constant.ResultSetName;
 import com.example.sbt.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import lombok.*;
+import com.example.sbt.module.email.dto.EmailDTO;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Entity
 @Table(
         name = "email",
@@ -22,9 +24,26 @@ import java.util.UUID;
                 @Index(name = "email_created_at_idx", columnList = "created_at"),
         }
 )
+@SqlResultSetMapping(name = ResultSetName.EMAIL_SEARCH, classes = {
+        @ConstructorResult(targetClass = EmailDTO.class, columns = {
+                @ColumnResult(name = "id", type = UUID.class),
+                @ColumnResult(name = "user_id", type = UUID.class),
+                @ColumnResult(name = "to_email", type = String.class),
+                @ColumnResult(name = "cc_email", type = String.class),
+                @ColumnResult(name = "subject", type = String.class),
+                @ColumnResult(name = "body", type = String.class),
+                @ColumnResult(name = "retry_count", type = Integer.class),
+                @ColumnResult(name = "type", type = String.class),
+                @ColumnResult(name = "status", type = String.class),
+                @ColumnResult(name = "send_status", type = String.class),
+                @ColumnResult(name = "is_html", type = Boolean.class),
+                @ColumnResult(name = "created_at", type = Instant.class),
+                @ColumnResult(name = "updated_at", type = Instant.class),
+        })
+})
 public class Email extends BaseEntity {
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private UUID userId;
     @Column(name = "to_email", columnDefinition = "text")
     private String toEmail;
@@ -40,6 +59,8 @@ public class Email extends BaseEntity {
     private String type;
     @Column(name = "status")
     private String status;
+    @Column(name = "send_status")
+    private String sendStatus;
     @Column(name = "is_html")
     private Boolean isHtml;
 

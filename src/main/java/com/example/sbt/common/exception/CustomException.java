@@ -3,13 +3,11 @@ package com.example.sbt.common.exception;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@ToString
 public class CustomException extends RuntimeException {
 
     private HttpStatus status;

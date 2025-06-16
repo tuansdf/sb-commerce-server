@@ -14,7 +14,7 @@ public interface ConfigurationRepository extends JpaRepository<Configuration, UU
 
     Optional<Configuration> findTopByCode(String code);
 
-    @Query(value = "select c.value from configuration c where c.code = :code limit 1", nativeQuery = true)
-    String findTopValueByCodeAndStatus(String code);
+    @Query(value = "select value from configuration where code = :code and status = :status order by id asc limit 1", nativeQuery = true)
+    String findTopValueByCodeAndStatus(String code, String status);
 
 }

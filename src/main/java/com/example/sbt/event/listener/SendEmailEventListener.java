@@ -1,7 +1,7 @@
 package com.example.sbt.event.listener;
 
-import com.example.sbt.common.constant.RedisKey;
-import com.example.sbt.common.dto.RequestContextHolder;
+import com.example.sbt.common.constant.EventKey;
+import com.example.sbt.common.dto.RequestHolder;
 import com.example.sbt.event.dto.SendEmailEventRequest;
 import com.example.sbt.module.email.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +23,21 @@ public class SendEmailEventListener implements StreamListener<String, ObjectReco
     public void onMessage(ObjectRecord<String, SendEmailEventRequest> message) {
         try {
             SendEmailEventRequest request = message.getValue();
-            RequestContextHolder.set(request.getRequestContext());
-            log.info("SendEmailEventListener.start");
+            RequestHolder.setContext(request.getRequestContext());
+            log.info("SendEmailEventListener.start ");
 
             emailService.executeSend(request.getEmail());
         } catch (Exception e) {
-            log.error("SendEmailEventListener.error", e);
+            log.error("SendEmailEventListener.error ", e);
         } finally {
             try {
-                redisTemplate.opsForStream().acknowledge(RedisKey.SEND_EMAIL_STREAM, message);
-                redisTemplate.opsForStream().delete(RedisKey.SEND_EMAIL_STREAM, message.getId());
+                redisTemplate.opsForStream().acknowledge(EventKey.SEND_EMAIL, message);
+                redisTemplate.opsForStream().delete(EventKey.SEND_EMAIL, message.getId());
 
-                log.info("SendEmailEventListener.end");
+                log.info("SendEmailEventListener.end ");
             } catch (Exception ignore) {
             }
-            RequestContextHolder.clear();
+            RequestHolder.clear();
         }
     }
 

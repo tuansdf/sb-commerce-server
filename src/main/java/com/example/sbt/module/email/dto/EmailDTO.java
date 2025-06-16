@@ -1,7 +1,10 @@
 package com.example.sbt.module.email.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -9,9 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class EmailDTO {
 
     private UUID id;
@@ -20,11 +21,15 @@ public class EmailDTO {
     private String ccEmail;
     private String subject;
     private String body;
+    @JsonIgnore
     private Integer retryCount;
+    @JsonIgnore
     private String type;
     private String status;
+    @JsonIgnore
+    private String sendStatus;
+    private Boolean isHtml;
     private Instant createdAt;
     private Instant updatedAt;
-    private Boolean isHtml;
 
 }

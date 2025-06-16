@@ -1,7 +1,7 @@
 package com.example.sbt.module.cart;
 
 import com.example.sbt.common.dto.CommonResponse;
-import com.example.sbt.common.dto.RequestContextHolder;
+import com.example.sbt.common.dto.RequestHolder;
 import com.example.sbt.common.util.ExceptionUtils;
 import com.example.sbt.module.cart.dto.CartDTO;
 import com.example.sbt.module.cart.dto.CartItemDTO;
@@ -25,7 +25,7 @@ public class CartController {
     @GetMapping("/me")
     public ResponseEntity<CommonResponse<CartDTO>> findOneOrInit() {
         try {
-            var result = cartService.findOneOrInitByUserId(RequestContextHolder.get().getUserId());
+            var result = cartService.findOneOrInitByUserId(RequestHolder.getContext().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -35,7 +35,7 @@ public class CartController {
     @PutMapping("/items")
     public ResponseEntity<CommonResponse<List<CartItemDTO>>> addItems(@RequestBody CartDTO requestDTO) {
         try {
-            var result = cartService.addItems(requestDTO.getItems(), RequestContextHolder.get().getUserId());
+            var result = cartService.addItems(requestDTO.getItems(), RequestHolder.getContext().getUserId());
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -45,7 +45,7 @@ public class CartController {
     @DeleteMapping("/items")
     public ResponseEntity<CommonResponse<Object>> deleteItems() {
         try {
-            cartService.deleteAllItemsByUserId(RequestContextHolder.get().getUserId());
+            cartService.deleteAllItemsByUserId(RequestHolder.getContext().getUserId());
             return ResponseEntity.ok(new CommonResponse<>());
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -55,7 +55,7 @@ public class CartController {
     @DeleteMapping("/items/{id}")
     public ResponseEntity<CommonResponse<Object>> deleteItem(@PathVariable UUID id) {
         try {
-            cartService.deleteItemByIdAndUserId(id, RequestContextHolder.get().getUserId());
+            cartService.deleteItemByIdAndUserId(id, RequestHolder.getContext().getUserId());
             return ResponseEntity.ok(new CommonResponse<>());
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);

@@ -36,12 +36,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/_/test")
+@RequestMapping("/testing")
+@Secured({PermissionCode.SYSTEM_ADMIN})
 public class PrivateController {
 
     private final StringRedisTemplate redisTemplate;
@@ -113,7 +112,8 @@ public class PrivateController {
     @GetMapping("/excel/import")
     public String testImportExcel(@RequestParam String inputPath) {
         List<UserDTO> items = new ArrayList<>();
-        ExcelHelper.Import.processTemplate(inputPath, workbook -> {
+        try (Workbook workbook = ExcelHelper.toWorkbook(inputPath)) {
+            if (workbook == null) return null;
             List<Object> header = List.of("Order", "ID", "Username", "Email", "Name", "Status", "Created At", "Updated At");
             int rowSize = header.size();
             Sheet sheet = workbook.getSheetAt(0);
@@ -141,7 +141,9 @@ public class PrivateController {
                     idx++;
                 }
             }
-        });
+        } catch (Exception e) {
+            log.error("test import ", e);
+        }
         log.info("items: {}", items.subList(0, Math.min(items.size(), 100)));
         return "OK";
     }
@@ -275,8 +277,8 @@ public class PrivateController {
         return "OK";
     }
 
-    @GetMapping(value = "/s3-upload", produces = APPLICATION_JSON_VALUE)
-    public Object testS3Upload(@RequestParam MultipartFile file, @RequestParam String filePath) {
+    @GetMapping(value = "/s3-upload", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object testS3Upload(@RequestParam MultipartFile file, @RequestParam String filePath) throws IOException {
         return fileObjectService.uploadImage(file, filePath);
     }
 

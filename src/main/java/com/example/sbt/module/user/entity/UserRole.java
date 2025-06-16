@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(
         name = "user_role",
@@ -23,9 +23,9 @@ import java.util.UUID;
 )
 public class UserRole extends BaseEntity {
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private UUID userId;
-    @Column(name = "role_id")
+    @Column(name = "role_id", updatable = false)
     private UUID roleId;
 
 }

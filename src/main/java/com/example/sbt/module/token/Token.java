@@ -5,16 +5,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Entity
 @Table(
         name = "token",
@@ -25,7 +27,7 @@ import java.util.UUID;
 )
 public class Token extends BaseEntity {
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", updatable = false)
     private UUID ownerId;
     @Column(name = "expires_at")
     private Instant expiresAt;

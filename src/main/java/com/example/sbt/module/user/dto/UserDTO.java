@@ -2,8 +2,10 @@ package com.example.sbt.module.user.dto;
 
 import com.example.sbt.common.util.ConversionUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
@@ -16,9 +18,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
 
     private UUID id;
@@ -69,17 +69,17 @@ public class UserDTO {
     public void setRoleCodes(String roles) {
         if (StringUtils.isBlank(roles)) {
             this.roleCodes = new HashSet<>();
-            return;
+        } else {
+            this.roleCodes = Arrays.stream(roles.split(",")).map(ConversionUtils::safeTrim).collect(Collectors.toSet());
         }
-        this.roleCodes = Arrays.stream(roles.split(",")).map(x -> ConversionUtils.safeToString(x).trim()).collect(Collectors.toSet());
     }
 
     public void setPermissionCodes(String permissions) {
         if (StringUtils.isBlank(permissions)) {
             this.permissionCodes = new HashSet<>();
-            return;
+        } else {
+            this.permissionCodes = Arrays.stream(permissions.split(",")).map(ConversionUtils::safeTrim).collect(Collectors.toSet());
         }
-        this.permissionCodes = Arrays.stream(permissions.split(",")).map(x -> ConversionUtils.safeToString(x).trim()).collect(Collectors.toSet());
     }
 
 }
